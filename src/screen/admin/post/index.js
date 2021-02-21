@@ -90,6 +90,10 @@ const Post = (props) => {
     setInput({ ...input, thumbnail: e.target.files[0] });
   };
 
+  const handleSummernoteChange = (content) => {
+    setInput({ ...input, description: content });
+  };
+
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
@@ -214,7 +218,6 @@ const Post = (props) => {
                   type="file"
                   name="thumbnail"
                   accept="image/*"
-                  required={true}
                   onChange={handleFileChange}
                 />
               </FormGroup>
@@ -234,10 +237,8 @@ const Post = (props) => {
                       ["view", ["fullscreen", "codeview"]],
                     ],
                   }}
-                  onChange={(e) => {
-                    console.log(e);
-                    setInput({ ...input, description: e });
-                  }}
+                  value={input.description}
+                  onChange={handleSummernoteChange}
                 />
               </FormGroup>
               <Button color="primary" type="submit">
@@ -260,7 +261,13 @@ const Post = (props) => {
                 {posts.map((post, index) => (
                   <tr key={index}>
                     <td>{index + 1}</td>
-                    <td>{post.thumbnail}</td>
+                    <td>
+                      <img
+                        src={`${config.serverRoot}/${post.thumbnail}`}
+                        width="64"
+                        alt={post.name}
+                      />
+                    </td>
                     <td>{post.title}</td>
                     <td>{post.category.name}</td>
                     <td>{post.user.name}</td>
@@ -274,10 +281,9 @@ const Post = (props) => {
                           setInput({
                             ...input,
                             id: post.id,
-                            name: post.name,
-                            email: post.email,
-                            password: "",
-                            password_confirmation: "",
+                            title: post.title,
+                            category_id: post.category_id,
+                            description: post.description,
                           });
                         }}
                       >
